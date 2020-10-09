@@ -87,6 +87,11 @@ def get_extensions():
         )
 
     sources = [main_source] + sources
+    sources = [
+        s
+        for s in sources
+        if not is_rocm_pytorch or torch_ver < [1, 7] or not s.endswith("hip/vision.cpp")
+    ]
 
     extension = CppExtension
 
@@ -192,7 +197,6 @@ setup(
         "tabulate",
         "cloudpickle",
         "matplotlib",
-        "mock",
         "tqdm>4.29.0",
         "tensorboard",
         "fvcore>=0.1.1",
